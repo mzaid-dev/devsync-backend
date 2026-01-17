@@ -52,7 +52,17 @@ else:
     }
 
 # --- EMAIL CONFIGURATION ---
-if 'RENDER' in os.environ or os.environ.get('RESEND_API_KEY'):
+# CHECK FOR BREVO (SENDINBLUE) - Allows sending to anyone (300/day)
+if os.environ.get('BREVO_API_KEY'):
+    EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+    ANYMAIL = {
+        "BREVO_API_KEY": os.environ.get('BREVO_API_KEY'),
+    }
+    # Brevo allows sending from your verified Gmail
+    DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+
+# CHECK FOR RESEND - Best deliverability, but requires Domain for public sending
+elif 'RENDER' in os.environ or os.environ.get('RESEND_API_KEY'):
     EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
     ANYMAIL = {
         "RESEND_API_KEY": os.environ.get('RESEND_API_KEY'),
