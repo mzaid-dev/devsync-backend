@@ -31,7 +31,8 @@ LOGGING = {
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key')
 
 # 2. DEBUG: False in Cloud (Render), True in Local
-DEBUG = 'RENDER' not in os.environ
+# Allow overriding (e.g., set DEBUG=True in Render Env Vars to see errors)
+DEBUG = 'RENDER' not in os.environ or os.environ.get('DEBUG') == 'True'
 
 # 3. ALLOWED_HOSTS
 ALLOWED_HOSTS = ['*']
