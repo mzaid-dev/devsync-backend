@@ -12,6 +12,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- SECURITY CONFIGURATION ---
 
+# LOGGING: Helps debug 500 errors on Render
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+
 # 1. SECRET_KEY: Read from env or use fallback for local dev
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key')
 
@@ -36,7 +51,7 @@ else:
     }
 
 # --- EMAIL CONFIGURATION ---
-if 'RENDER' in os.environ:
+if 'RENDER' in os.environ or os.environ.get('RESEND_API_KEY'):
     EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
     ANYMAIL = {
         "RESEND_API_KEY": os.environ.get('RESEND_API_KEY'),
